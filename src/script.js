@@ -15,10 +15,23 @@ newsSearchButton.addEventListener('click', () => {
     }
 });
 
+let date = new Date();
+let day = date.getUTCDate();
+let month = date.getUTCMonth() + 1 ;
+let year = date.getUTCFullYear();
+if (month < 10) {
+    month = '0' + month;
+}
+if (day < 10) {
+    day = '0' + day;
+}
+let toDate = `${year}-${month}-${day}`;
+console.log(`Date is : ${toDate}`);
 
 const findNews = async (topic) => {
-    let finalURL = `${url}${topic}&apiKey=7023ae9102054b68935450c8cf20d35d`;
-    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-04&to=2024-07-05&sortBy=popularity&apiKey=7023ae9102054b68935450c8cf20d35d`;
+    // let finalURL = `${url}${topic}&apiKey=${APIKEY}`;
+    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-04&to=${toDate}&sortBy=popularity&apiKey=${APIKEY}`;
+    console.log(finalURL);
     const res = await fetch(finalURL);
 
     const Data = await res.json();
@@ -128,8 +141,9 @@ function bindNews(news) {
 
 
 const findNewsOnClick = async (topic) => {
-    let finalURL = `${url}${topic}&apiKey=7023ae9102054b68935450c8cf20d35d`;
-    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-03&to=2024-07-03&sortBy=popularity&apiKey=7023ae9102054b68935450c8cf20d35d`;
+    // let finalURL = `${url}${topic}&apiKey=7023ae9102054b68935450c8cf20d35d`;
+    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-04&to=${toDate}&sortBy=popularity&apiKey=${APIKEY}`;
+
     const res = await fetch(finalURL);
 
     const Data = await res.json();
