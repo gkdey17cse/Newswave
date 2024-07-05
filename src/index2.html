@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .swiper-wrapper {
+            width: 100%;
+            height: max-content !important;
+            padding-bottom: 64px !important;
+            -webkit-transition-timing-function: linear !important;
+            transition-timing-function: linear !important;
+            position: relative;
+        }
+
+        .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+            background: #4F46E5 !important;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+</head>
+
+<body>
+    <!--HTML CODE-->
+    <div class="w-full relative">
+        <div class="swiper progress-slide-carousel swiper-container relative">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                        <span class="text-3xl font-semibold text-indigo-600">Slide 1 </span>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                        <span class="text-3xl font-semibold text-indigo-600">Slide 2 </span>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                        <span class="text-3xl font-semibold text-indigo-600">Slide 3 </span>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination !bottom-2 !top-auto !w-80 right-0 mx-auto bg-gray-100"></div>
+        </div>
+    </div>
+
+    // <!--JAVASCRIPT CODE-->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script>
+        var swiper = new Swiper(".progress-slide-carousel", {
+            loop: true,
+            fraction: true,
+            autoplay: {
+                delay: 1200,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".progress-slide-carousel .swiper-pagination",
+                type: "progressbar",
+            },
+        });
+    </script>
+
+</body>
+
+</html>

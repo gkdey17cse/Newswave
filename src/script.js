@@ -18,7 +18,7 @@ newsSearchButton.addEventListener('click', () => {
 
 const findNews = async (topic) => {
     let finalURL = `${url}${topic}&apiKey=7023ae9102054b68935450c8cf20d35d`;
-    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-03&to=2024-07-03&sortBy=popularity&apiKey=7023ae9102054b68935450c8cf20d35d`;
+    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-04&to=2024-07-05&sortBy=popularity&apiKey=7023ae9102054b68935450c8cf20d35d`;
     const res = await fetch(finalURL);
 
     const Data = await res.json();
@@ -80,7 +80,7 @@ function bindNews(news) {
         }
 
         bannerContainer.innerHTML = banner;
-        bannerContainer.classList.add('owl-carousel');
+        // bannerContainer.classList.add('owl-carousel');
     }
     // Create the latest News section
     for (let i = 5; i < news.length; i++) {

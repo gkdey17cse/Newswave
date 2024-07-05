@@ -11,16 +11,16 @@
         href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Jacquard+24+Charted&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Oswald:wght@200..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
     <!-- Owl Carousel -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
         integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
         integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <!-- Swipper -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> -->
+    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 
 <body class="bg-slate-100 mx-auto tracking-wider" style='font-family: "Raleway", sans-serif;'>
@@ -161,11 +161,11 @@
         </nav>
         <!-- Navigation End   -->
 
-        <section id="main" class="bg-white pb-2">
+        <section id="main" class="bg-white pb-2 swiper progress-slide-carousel swiper-container relative">
             <!-- Banner -->
-            <div id="bannerContainer" class="owl-carousel">
+            <div id="bannerContainer" class="swiper-wrapper">
 
-                <div href=" #" class="relative mx-auto mt-2">
+                <div href=" #" class="swiper-slide relative mx-auto mt-2">
                     <img id="newsImg" class="w-full object-cover rounded-lg" style="height: 500px;"
                         src="https://mcmscache.epapr.in/post_images/website_350/post_34206741/full.jpg"
                         alt="News image">
@@ -191,7 +191,7 @@
                     </div>
                 </div>
 
-                <div href="#" class="relative mx-auto mt-2">
+                <div href="#" class="swiper-slide relative mx-auto mt-2">
                     <img id="newsImg" class="w-full object-cover rounded-lg" style="height: 500px;"
                         src="https://mcmscache.epapr.in/post_images/website_350/post_34206741/full.jpg"
                         alt="News image">
@@ -217,7 +217,7 @@
                     </div>
                 </div>
 
-                <div href="#" class="relative mx-auto mt-2">
+                <div href="#" class="swiper-slide relative mx-auto mt-2">
                     <img id="newsImg" class="w-full object-cover rounded-lg" style="height: 500px;"
                         src="https://mcmscache.epapr.in/post_images/website_350/post_34206741/full.jpg"
                         alt="News image">
@@ -377,26 +377,16 @@
 
     <script src="./script.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
 
     <script>
-
-        setTimeout(function () { FetchData(); }, 1000);
+        function runFetchData() {
+            setTimeout(function () { FetchData(); }, 1000);
+        }
         function FetchData() {
             var owl = $('.owl-carousel');
             owl.owlCarousel({
-                // responsive: {
-                //     0: {
-                //         items: 1,
-                //     },
-                //     768: {
-                //         items: 2,
-                //     },
-                //     1280: {
-                //         items: 3,
-                //     }
-                // },
                 items: 1,
                 loop: true,
                 margin: 20,
@@ -407,6 +397,28 @@
                 // ltr: true
             });
         }
+    </script> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <script>
+
+        setTimeout(() => {
+            var swiper = new Swiper(".progress-slide-carousel", {
+                loop: true,
+                fraction: true,
+                autoplay: {
+                    delay: 1200,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: ".progress-slide-carousel .swiper-pagination",
+                    type: "progressbar",
+                },
+            });
+        }, 2000);
+
     </script>
 
     <script>
