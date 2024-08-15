@@ -1,5 +1,5 @@
-
-let APIKEY = '7023ae9102054b68935450c8cf20d35d';
+// https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=0ff66e6300054551b98cc2ba4a6fda06
+let APIKEY = '0ff66e6300054551b98cc2ba4a6fda06';
 const url = "https://newsapi.org/v2/everything?q=";
 
 
@@ -15,22 +15,29 @@ newsSearchButton.addEventListener('click', () => {
     }
 });
 
-let date = new Date();
-let day = date.getUTCDate();
-let month = date.getUTCMonth() + 1 ;
-let year = date.getUTCFullYear();
-if (month < 10) {
-    month = '0' + month;
+
+
+function getTodayDate(){
+    let date = new Date();
+    let day = date.getUTCDate();
+    let month = date.getUTCMonth() + 1 ;
+    let year = date.getUTCFullYear();
+    if (month < 10) {
+        month = '0' + month;
+    }
+    if (day < 10) {
+        day = '0' + day - 1;
+    }
+    let toDate = `${year}-${month}-${day}`;
+    console.log(`Date is : ${toDate}`);
+    return toDate ;
 }
-if (day < 10) {
-    day = '0' + day;
-}
-let toDate = `${year}-${month}-${day}`;
-console.log(`Date is : ${toDate}`);
 
 const findNews = async (topic) => {
     // let finalURL = `${url}${topic}&apiKey=${APIKEY}`;
-    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-04&to=${toDate}&sortBy=popularity&apiKey=${APIKEY}`;
+    // finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-04&to=${toDate}&sortBy=popularity&apiKey=${APIKEY}`;
+    toDate = getTodayDate();
+    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-15&sortBy=publishedAt&apiKey=7023ae9102054b68935450c8cf20d35d`;
     console.log(finalURL);
     const res = await fetch(finalURL);
 
@@ -64,7 +71,7 @@ function bindNews(news) {
         const newsdate = new Date(news[i].publishedAt).toLocaleString("en-US", {
             timeZone: "Asia/Jakarta"
         });
-
+        console.log(news[i]);
         if (news[i].urlToImage) {
             banner += `
                         
@@ -93,13 +100,14 @@ function bindNews(news) {
         }
 
         bannerContainer.innerHTML = banner;
-        // bannerContainer.classList.add('owl-carousel');
+        console.log(bannerContainer);
     }
     // Create the latest News section
     for (let i = 5; i < news.length; i++) {
         const newsdate = new Date(news[i].publishedAt).toLocaleString("en-US", {
             timeZone: "Asia/Jakarta"
         });
+        console.log(news[i]);
 
 
         if (news[i].urlToImage) {
@@ -142,8 +150,8 @@ function bindNews(news) {
 
 const findNewsOnClick = async (topic) => {
     // let finalURL = `${url}${topic}&apiKey=7023ae9102054b68935450c8cf20d35d`;
-    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-04&to=${toDate}&sortBy=popularity&apiKey=${APIKEY}`;
-
+    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-15&sortBy=publishedAt&apiKey=7023ae9102054b68935450c8cf20d35d`;
+    console.log(finalURL);
     const res = await fetch(finalURL);
 
     const Data = await res.json();
@@ -173,6 +181,8 @@ function bindNewsOnClick(news) {
         const newsdate = new Date(news[i].publishedAt).toLocaleString("en-US", {
             timeZone: "Asia/Jakarta"
         });
+
+        console.log(news[i]);
 
         if (news[i].urlToImage) {
             str += `
@@ -208,3 +218,4 @@ function bindNewsOnClick(news) {
     // console.log(cardsContainer);
 
 }
+
