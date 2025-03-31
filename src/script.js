@@ -1,221 +1,162 @@
-// https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=0ff66e6300054551b98cc2ba4a6fda06
-let APIKEY = '0ff66e6300054551b98cc2ba4a6fda06';
-const url = "https://newsapi.org/v2/everything?q=";
+let APIKEY = "0ff66e6300054551b98cc2ba4a6fda06";
+const BASE_URL = "https://newsapi.org/v2/everything?q=";
 
+const newsSearchButton = document.getElementById("newsSearchButton");
+const newsSubject = document.getElementById("newsSubject");
+window.addEventListener("load", () => findNews("India"));
 
-const newsSearchButton = document.getElementById('newsSearchButton');
-const newsSubject = document.getElementById('newsSubject');
-window.addEventListener('load', () => findNews("India"));
-
-newsSearchButton.addEventListener('click', () => {
-    let newsSearchInput = document.getElementById('newsSearchInput');
-    let topic = newsSearchInput.value;
-    if (topic !== '') {
-        findNewsOnClick(topic);
-    }
+newsSearchButton.addEventListener("click", () => {
+  let newsSearchInput = document.getElementById("newsSearchInput");
+  let topic = newsSearchInput.value;
+  if (topic !== "") {
+    findNewsOnClick(topic);
+  }
 });
 
+// https://newsapi.org/v2/everything?q={Delhi}&from=
+function getTodayDate() {
+  let date = new Date();
+  let day = date.getUTCDate() - 1; // Subtracting 1 to get the previous day
+  let month = date.getUTCMonth() + 1;
+  let year = date.getUTCFullYear();
 
+  if (month < 10) month = "0" + month;
+  if (day < 10) day = "0" + day;
 
-function getTodayDate(){
-    let date = new Date();
-    let day = date.getUTCDate();
-    let month = date.getUTCMonth() + 1 ;
-    let year = date.getUTCFullYear();
-    if (month < 10) {
-        month = '0' + month;
-    }
-    if (day < 10) {
-        day = '0' + day - 1;
-    }
-    let toDate = `${year}-${month}-${day}`;
-    console.log(`Date is : ${toDate}`);
-    return toDate ;
+  let toDate = `${year}-${month}-${day}`;
+  console.log(`Date is : ${toDate}`);
+  return toDate;
 }
 
 const findNews = async (topic) => {
-    // let finalURL = `${url}${topic}&apiKey=${APIKEY}`;
-    // finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-04&to=${toDate}&sortBy=popularity&apiKey=${APIKEY}`;
-    toDate = getTodayDate();
-    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-15&sortBy=publishedAt&apiKey=7023ae9102054b68935450c8cf20d35d`;
-    console.log(finalURL);
+  let toDate = getTodayDate();
+  let finalURL = `${BASE_URL}${topic}&from=${toDate}&sortBy=publishedAt&apiKey=${APIKEY}`;
+
+  console.log(`Fetching news from: ${finalURL}`);
+
+  try {
     const res = await fetch(finalURL);
+    if (!res.ok) throw new Error(`API error: ${res.statusText}`);
 
-    const Data = await res.json();
-
-    let jsonData = JSON.stringify(Data);
-
-    const jsonObject = JSON.parse(jsonData);
-
-    const articles = jsonObject.articles;
-
-    // console.log(articles);
+    const data = await res.json();
     newsSubject.innerHTML = topic;
-    bindNews(articles);
-
-}
+    bindNews(data.articles);
+  } catch (error) {
+    console.error("Error fetching news:", error);
+  }
+};
 
 function bindNews(news) {
-    const cardsContainer = document.getElementById('latest-news-container');
-    const newsCardTemplate = document.getElementById('latest-news');
-    const bannerContainer = document.getElementById('bannerContainer');
+  const cardsContainer = document.getElementById("latest-news-container");
+  const bannerContainer = document.getElementById("bannerContainer");
 
-    cardsContainer.innerHTML = '';
-    bannerContainer.innerHTML = '';
-    let banner = "";
-    let str = "";
+  cardsContainer.innerHTML = "";
+  bannerContainer.innerHTML = "";
+  let banner = "";
+  let str = "";
 
+  for (let i = 0; i < news.length; i++) {
+    const newsDate = new Date(news[i].publishedAt).toLocaleString("en-US", {
+      timeZone: "Asia/Jakarta",
+    });
 
-    // Banner section 
-    for (let i = 0; i < 5; i++) {
-        const newsdate = new Date(news[i].publishedAt).toLocaleString("en-US", {
-            timeZone: "Asia/Jakarta"
-        });
-        console.log(news[i]);
-        if (news[i].urlToImage) {
-            banner += `
-                        
-                            <div href="#" class="swiper-slide relative mx-auto mt-2">
-                                <img id="newsImg" class="w-full object-cover rounded-lg" src="${news[i].urlToImage}" style="height: 500px;"
-                                    alt="News image">
-                                <div class="absolute inset-0 bg-gray-900 opacity-50 rounded-md"></div>
-                                <div class="absolute inset-0 grid grid-flow-row grid-rows-2">
-                                    <div></div>
-                                    <div class="flex flex-col gap-2 justify-center items-center text-white">
-                                        <h2 id="newsTitle" class="text-amber-300 text-3xl text-center font-bold py-2">
-                                            ${news[i].title}</h2>
-                                        <div class="flex text-sm justify-around divide-x items-center italic py-1">
-                                            <h4 class="px-4" id="newsPublishedDate">${newsdate}</h4>
-                                        </div>
-                                        <p id="newsDetails" class="py-2 max-w-5xl text-center">
-                                            ${news[i].description}
-                                        </p>
-                                        <a href="${news[i].url}" id="newsurl"
-                                            class="px-4 py-2 border border-amber-400 hover:bg-amber-500 active:translate-x-1 active:translate-y-1 duration-200">Know
-                                            More</a>
-                                    </div>
-                                </div>
+    if (!news[i].urlToImage) continue;
+
+    if (i < 5) {
+      // Banner section for top 5 news articles
+      banner += `
+                <div class="swiper-slide relative mx-auto mt-2">
+                    <img class="w-full object-cover rounded-lg" src="${news[i].urlToImage}" style="height: 500px;">
+                    <div class="absolute inset-0 bg-gray-900 opacity-50 rounded-md"></div>
+                    <div class="absolute inset-0 grid grid-flow-row grid-rows-2">
+                        <div></div>
+                        <div class="flex flex-col gap-2 justify-center items-center text-white">
+                            <h2 class="text-amber-300 text-3xl text-center font-bold py-2">${news[i].title}</h2>
+                            <div class="flex text-sm justify-around divide-x items-center italic py-1">
+                                <h4 class="px-4">${newsDate}</h4>
                             </div>
-                        ` ;
-        }
-
-        bannerContainer.innerHTML = banner;
-        console.log(bannerContainer);
-    }
-    // Create the latest News section
-    for (let i = 5; i < news.length; i++) {
-        const newsdate = new Date(news[i].publishedAt).toLocaleString("en-US", {
-            timeZone: "Asia/Jakarta"
-        });
-        console.log(news[i]);
-
-
-        if (news[i].urlToImage) {
-            str += `
-                        <div>
-                        <div id="latest-news" class="p-1 border border-gray-600" style="height:390px">
-                            <a id="" href="${news[i].url}" class="flex justify-center items-center">
-                                <img id="newsImg" class="" style="height:170px"
-                                    src="${news[i].urlToImage}"
-                                    alt="">
-                            </a>
-                            <div class="p-2 text-xs">
-                                <h2 id="newsTitle" class="text-blue-600 font-semibold py-1">${news[i].title}</h2>
-
-                                    <div class="flex justify-start items-center">
-                                        <div class="flex justify-between gap-4">
-                                            <h4 class="" id="newsPublishedDate">${newsdate}</h4>
-                                        </div>
-                                    </div>
-
-                                <p id="newsDetails" class="py-1 font-normal text-justify">
-                                    ${news[i].description} 
-                                    <span><a href="${news[i].url}" target="_blank" class="text-indigo-600 font-semibold italic">Read More</a></span>
-                                </p>
-                            </div>
-
+                            <p class="py-2 max-w-5xl text-center">${news[i].description}</p>
+                            <a href="${news[i].url}" class="px-4 py-2 border border-amber-400 hover:bg-amber-500">Know More</a>
                         </div>
-                    </div>  ` ;
-        }
+                    </div>
+                </div>`;
+    } else {
+      // Latest News section
+      str += `
+                <div>
+                    <div class="p-1 border border-gray-600" style="height:390px">
+                        <a href="${news[i].url}" class="flex justify-center items-center">
+                            <img style="height:170px" src="${news[i].urlToImage}" alt="">
+                        </a>
+                        <div class="p-2 text-xs">
+                            <h2 class="text-blue-600 font-semibold py-1">${news[i].title}</h2>
+                            <div class="flex justify-between gap-4">
+                                <h4>${newsDate}</h4>
+                            </div>
+                            <p class="py-1 font-normal text-justify">
+                                ${news[i].description}
+                                <span><a href="${news[i].url}" target="_blank" class="text-indigo-600 font-semibold italic">Read More</a></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>`;
     }
+  }
 
-    cardsContainer.innerHTML = str;
-
-    console.log(bannerContainer);
-    // console.log(cardsContainer);
-
+  bannerContainer.innerHTML = banner;
+  cardsContainer.innerHTML = str;
 }
-
-
 
 const findNewsOnClick = async (topic) => {
-    // let finalURL = `${url}${topic}&apiKey=7023ae9102054b68935450c8cf20d35d`;
-    finalURL = `https://newsapi.org/v2/everything?q=${topic}&from=2024-07-15&sortBy=publishedAt&apiKey=7023ae9102054b68935450c8cf20d35d`;
-    console.log(finalURL);
+  let toDate = getTodayDate();
+  let finalURL = `${BASE_URL}${topic}&from=${toDate}&sortBy=publishedAt&apiKey=${APIKEY}`;
+
+  console.log(`Fetching news from: ${finalURL}`);
+
+  try {
     const res = await fetch(finalURL);
+    if (!res.ok) throw new Error(`API error: ${res.statusText}`);
 
-    const Data = await res.json();
-
-    let jsonData = JSON.stringify(Data);
-
-    const jsonObject = JSON.parse(jsonData);
-
-    const articles = jsonObject.articles;
-
-    // console.log(articles);
+    const data = await res.json();
     newsSubject.innerHTML = topic;
-    bindNewsOnClick(articles);
-
-}
+    bindNewsOnClick(data.articles);
+  } catch (error) {
+    console.error("Error fetching news:", error);
+  }
+};
 
 function bindNewsOnClick(news) {
-    const cardsContainer = document.getElementById('latest-news-container');
-    const newsCardTemplate = document.getElementById('latest-news');
+  const cardsContainer = document.getElementById("latest-news-container");
+  cardsContainer.innerHTML = "";
 
-    cardsContainer.innerHTML = '';
+  let str = "";
 
-    let str = "";
+  for (let i = 0; i < news.length; i++) {
+    const newsDate = new Date(news[i].publishedAt).toLocaleString("en-US", {
+      timeZone: "Asia/Jakarta",
+    });
 
-    // Create the latest News section
-    for (let i = 0; i < news.length; i++) {
-        const newsdate = new Date(news[i].publishedAt).toLocaleString("en-US", {
-            timeZone: "Asia/Jakarta"
-        });
+    if (!news[i].urlToImage) continue;
 
-        console.log(news[i]);
-
-        if (news[i].urlToImage) {
-            str += `
-                        <div>
-                        <div id="latest-news" class="p-1 border border-gray-600" style="height:390px">
-                            <a id="" href="${news[i].url}" class="flex justify-center items-center">
-                                <img id="newsImg" class="" style="height:170px"
-                                    src="${news[i].urlToImage}"
-                                    alt="">
-                            </a>
-                            <div class="p-2 text-xs">
-                                <h2 id="newsTitle" class="text-blue-600 font-semibold py-1">${news[i].title}</h2>
-
-                                    <div class="flex justify-start items-center">
-                                        <div class="flex justify-between gap-4">
-                                            <h4 class="" id="newsPublishedDate">${newsdate}</h4>
-                                        </div>
-                                    </div>
-
-                                <p id="newsDetails" class="py-1 font-normal text-justify">
-                                    ${news[i].description} 
-                                    <span><a href="${news[i].url}" target="_blank" class="text-indigo-600 font-semibold italic">Read More</a></span>
-                                </p>
-                            </div>
-
+    str += `
+            <div>
+                <div class="p-1 border border-gray-600" style="height:390px">
+                    <a href="${news[i].url}" class="flex justify-center items-center">
+                        <img style="height:170px" src="${news[i].urlToImage}" alt="">
+                    </a>
+                    <div class="p-2 text-xs">
+                        <h2 class="text-blue-600 font-semibold py-1">${news[i].title}</h2>
+                        <div class="flex justify-between gap-4">
+                            <h4>${newsDate}</h4>
                         </div>
-                    </div>  ` ;
-        }
-    }
+                        <p class="py-1 font-normal text-justify">
+                            ${news[i].description}
+                            <span><a href="${news[i].url}" target="_blank" class="text-indigo-600 font-semibold italic">Read More</a></span>
+                        </p>
+                    </div>
+                </div>
+            </div>`;
+  }
 
-    cardsContainer.innerHTML = str;
-
-    // console.log(cardsContainer);
-
+  cardsContainer.innerHTML = str;
 }
-
